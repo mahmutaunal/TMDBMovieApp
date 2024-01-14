@@ -11,12 +11,22 @@ interface MovieClickListener {
     fun onMovieClicked(movieId: Int?)
 }
 
-class MovieAdapter(private val movieList: List<MovieItem?>, private val movieClickListener: MovieClickListener): RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+class MovieAdapter(
+    private val movieList: List<MovieItem?>,
+    private val movieClickListener: MovieClickListener
+) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
-    class ViewHolder(val binding: ItemHomeRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: ItemHomeRecyclerViewBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemHomeRecyclerViewBinding.inflate(LayoutInflater.from(parent.context),parent, false))
+        return ViewHolder(
+            ItemHomeRecyclerViewBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

@@ -31,14 +31,20 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    // Function that observes changes from ViewModel
     private fun observeEvents() {
+        // Observer monitoring the visibility of ProgressDialog
         viewModel.isLoading.observe(viewLifecycleOwner) {
             binding.progressBarDetail.isVisible = it
         }
+
+        // Observer that monitors the content and visibility of the TextView that displays the error message
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             binding.textViewErrorDetail.text = it
             binding.textViewErrorDetail.isVisible = true
         }
+
+        // Observer that updates UI elements showing movie details
         viewModel.movieResponse.observe(viewLifecycleOwner) { movie ->
             binding.imageViewDetail.loadImage(movie.backdropPath)
 
@@ -48,14 +54,17 @@ class DetailFragment : Fragment() {
 
             binding.textViewDetailOverview.text = movie.overview
 
+            // Make UI elements visible to show Movie details
             binding.movieDetailGroup.isVisible = true
 
+            // Update ActionBar header (by accessing MainActivity)
             (requireActivity() as MainActivity).supportActionBar?.title = movie.title
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // Set binding to null (memory leak prevention)
         _binding = null
     }
 }

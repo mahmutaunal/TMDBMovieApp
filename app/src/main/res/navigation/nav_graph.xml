@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.mahmutalperenunal.tmdbmovieapp.ui.home.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home" >
+        android:label="Movies"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
@@ -17,7 +17,6 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.mahmutalperenunal.tmdbmovieapp.ui.detail.DetailFragment"
-        android:label="Details"
         tools:layout="@layout/fragment_detail">
         <argument
             android:name="movieId"

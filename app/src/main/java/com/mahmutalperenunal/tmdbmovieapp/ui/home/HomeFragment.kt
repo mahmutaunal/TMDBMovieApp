@@ -35,18 +35,28 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Set binding to null (memory leak prevention)
+        _binding = null
+    }
+
+    // Function that observes and updates changes in the view
     @SuppressLint("SetTextI18n")
     private fun observeEvents() {
+        // Observer monitoring the error message
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             binding.textViewHomeError.text = error
             binding.textViewHomeError.isVisible = true
         }
 
+        // Observer monitoring the visibility of ProgressDialog
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             binding.progressBar.isVisible = loading
             binding.homeRecyclerView.isVisible = !loading
         }
 
+        // Observer watching the movie list
         viewModel.movieList.observe(viewLifecycleOwner) { list ->
             if (list.isNullOrEmpty()) {
                 binding.textViewHomeError.text = "There is any movie :("
@@ -65,6 +75,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Observer watching filtered movie list
         viewModel.filteredMovieList.observe(viewLifecycleOwner) { filteredList ->
             if (filteredList.isNullOrEmpty()) {
                 binding.textViewHomeError.text = "No matching movies found :("
@@ -91,11 +102,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun initializeSpinner() {
         val spinner: Spinner = binding.spinner
 
@@ -113,6 +119,7 @@ class HomeFragment : Fragment() {
         val spinnerPosition = spinnerAdapter.getPosition("Popular")
         spinner.setSelection(spinnerPosition)
 
+        // Listener called when Spinner elements change
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,

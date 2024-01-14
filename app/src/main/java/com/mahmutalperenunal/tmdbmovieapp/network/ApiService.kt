@@ -9,27 +9,27 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    @GET("movie/now_playing")
+    @GET("now_playing")
     suspend fun getNowPlayingMovieList(
         @Header("Authorization") token: String
     ): Response<MovieResponse>
 
-    @GET("movie/popular")
+    @GET("popular")
     suspend fun getPopularMovieList(
         @Header("Authorization") token: String
     ): Response<MovieResponse>
 
-    @GET("movie/top_rated")
+    @GET("top_rated")
     suspend fun getTopRatedMovieList(
         @Header("Authorization") token: String
     ): Response<MovieResponse>
 
-    @GET("movie/upcoming")
+    @GET("upcoming")
     suspend fun getUpcomingMovieList(
         @Header("Authorization") token: String
     ): Response<MovieResponse>
 
-    @GET("movie/{movieId}")
+    @GET("{movieId}")
     suspend fun getMovieDetail(
         @Path("movieId") movieId: String,
         @Header("Authorization") token: String

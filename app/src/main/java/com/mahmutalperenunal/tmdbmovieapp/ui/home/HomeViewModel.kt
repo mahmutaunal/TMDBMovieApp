@@ -16,8 +16,10 @@ class HomeViewModel : ViewModel() {
     val isLoading = MutableLiveData(false)
     val errorMessage: MutableLiveData<String?> = MutableLiveData()
 
+    // MutableLiveData holding selected category information
     private val selectedCategory = MutableLiveData<String>()
 
+    // MutableLiveData holding a list of movies filtered by the selected category
     private val _filteredMovieList: MutableLiveData<List<MovieItem?>?> = MutableLiveData()
     val filteredMovieList: LiveData<List<MovieItem?>?> get() = _filteredMovieList
 
@@ -31,12 +33,22 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
 
+                // Make an API request using the Retrofit client according to the selected category
                 val response = when (selectedCategory.value ?: "Popular") {
-                    "Popular" -> ApiClient.getClient().getPopularMovieList(token = Constants.BEARER_TOKEN)
-                    "Top Rated" -> ApiClient.getClient().getTopRatedMovieList(token = Constants.BEARER_TOKEN)
-                    "Upcoming" -> ApiClient.getClient().getUpcomingMovieList(token = Constants.BEARER_TOKEN)
-                    "Now Playing" -> ApiClient.getClient().getNowPlayingMovieList(token = Constants.BEARER_TOKEN)
-                    else -> ApiClient.getClient().getPopularMovieList(token = Constants.BEARER_TOKEN)
+                    "Popular" -> ApiClient.getClient()
+                        .getPopularMovieList(token = Constants.BEARER_TOKEN)
+
+                    "Top Rated" -> ApiClient.getClient()
+                        .getTopRatedMovieList(token = Constants.BEARER_TOKEN)
+
+                    "Upcoming" -> ApiClient.getClient()
+                        .getUpcomingMovieList(token = Constants.BEARER_TOKEN)
+
+                    "Now Playing" -> ApiClient.getClient()
+                        .getNowPlayingMovieList(token = Constants.BEARER_TOKEN)
+
+                    else -> ApiClient.getClient()
+                        .getPopularMovieList(token = Constants.BEARER_TOKEN)
                 }
 
                 if (response.isSuccessful) {
@@ -50,14 +62,14 @@ class HomeViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 errorMessage.value = e.message
-            }
-            finally {
+            } finally {
                 isLoading.value = false
             }
         }
     }
 
     fun onCategorySelected(category: String) {
+        // Update the selected category information and retrieve the movie list
         selectedCategory.value = category
         getMovieList()
     }
@@ -65,6 +77,7 @@ class HomeViewModel : ViewModel() {
     fun filterMovies(query: String) {
         val fullMovieList = movieList.value
         if (fullMovieList != null) {
+            // Filter by search query and post to _filteredMovieList LiveData
             val filteredList = fullMovieList.filter {
                 it?.title?.contains(query, ignoreCase = true) == true
             }
